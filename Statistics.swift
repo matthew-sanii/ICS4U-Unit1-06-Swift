@@ -19,7 +19,8 @@ let fileUrl = URL(fileURLWithPath: path)
 print(fileUrl)
 
 guard FileManager.default.fileExists(atPath: fileUrl.path) else {
-    preconditionFailure("File expected at \(fileUrl.absoluteString) is missing.")
+    print("File expected at \(fileUrl.absoluteString) is missing.")
+    exit(1)
 }
 
 // open the file for reading
@@ -45,13 +46,14 @@ while bytesRead > 0 {
 }
 
 print(list)
-print(mean(numbers: list))
-print(calculateMedian(array: list))
+list.sort()
+print("The mean is:", mean(numbers: list))
+print("The median is:", calculateMedian(array: list))
 
 func mean(numbers: [Int]) -> Int {
     var total: Int = 0
     for number in numbers {
-        total += number
+        total += Int(number)
     }
     return total / Int(numbers.count)
 }
