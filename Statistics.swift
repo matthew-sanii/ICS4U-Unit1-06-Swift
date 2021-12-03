@@ -18,25 +18,18 @@ guard let path = UserDefaults.standard.string(forKey: "path") else {
 let fileUrl = URL(fileURLWithPath: path)
 print(fileUrl)
 
-//let home = FileManager.default.homeDirectoryForCurrentUser
-
-//let fileUrl = home
-//    .appendingPathComponent("test")
-//    .appendingPathExtension("txt")
-
 guard FileManager.default.fileExists(atPath: fileUrl.path) else {
     preconditionFailure("File expected at \(fileUrl.absoluteString) is missing.")
 }
 
-//open the file for reading
-guard let filePointer:UnsafeMutablePointer<FILE> = fopen(fileUrl.path,"r") else { preconditionFailure("Could not open file at \(fileUrl.absoluteString)")
+// open the file for reading
+guard let filePointer: UnsafeMutablePointer<FILE> = fopen(fileUrl.path, "r") else {
+    preconditionFailure("Could not open file at \(fileUrl.absoluteString)")
 }
 
-var lineByteArrayPointer: UnsafeMutablePointer<CChar>? = nil
-
+var lineByteArrayPointer: UnsafeMutablePointer<CChar>?
 var lineCap: Int = 0
-
-var bytesRead = getline(&lineByteArrayPointer,&lineCap, filePointer)
+var bytesRead = getline(&lineByteArrayPointer, &lineCap, filePointer)
 
 defer {
 fclose(filePointer)
@@ -44,13 +37,16 @@ fclose(filePointer)
 
 var list = [Int]()
 
-while (bytesRead > 0) {
-    let lineAsString = String.init(cString:lineByteArrayPointer!)
-    print (lineAsString)
+while bytesRead > 0 {
+    let lineAsString = String.init(cString: lineByteArrayPointer!)
+    let value = Int((lineAsString).trimmingCharacters(in: .whitespacesAndNewlines)) ?? 0
+    list.append(value)
     bytesRead = getline(&lineByteArrayPointer, &lineCap, filePointer)
-    let value = Int!(lineAsString)
-    list.append(Int!(lineAsString))
 }
+
+print(list)
+print(mean(numbers: list))
+print(calculateMedian(array: list))
 
 func mean(numbers: [Int]) -> Int {
     var total: Int = 0
