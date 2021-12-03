@@ -42,29 +42,28 @@ defer {
 fclose(filePointer)
 }
 
+var list = [Int]()
+
 while (bytesRead > 0) {
     let lineAsString = String.init(cString:lineByteArrayPointer!)
     print (lineAsString)
     bytesRead = getline(&lineByteArrayPointer, &lineCap, filePointer)
+    let value = Int!(lineAsString)
+    list.append(Int!(lineAsString))
 }
 
-exit(0)
-
-
-var list = [Int]()
-
-func mean(_ numbers: Double...) -> Double {
-    var total: Double = 0
+func mean(numbers: [Int]) -> Int {
+    var total: Int = 0
     for number in numbers {
         total += number
     }
-    return total / Double(numbers.count)
+    return total / Int(numbers.count)
 }
 
 func calculateMedian(array: [Int]) -> Float {
     let sorted = array.sorted()
     if sorted.count % 2 == 0 {
-        return Float((sorted[(sorted.count / 2)] + sorted[(sorted.count / 2) - 1])) / 2
+        return Float((sorted[(sorted.count / 2)] + sorted[(sorted.count / 2) - 1]) / 2)
     } else {
         return Float(sorted[(sorted.count - 1) / 2])
     }
